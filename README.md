@@ -1,6 +1,6 @@
 # EDRR
 
-Evidential Document Re-Ranking (E
+Evidential Document Re-Ranking
 
 The quality of the two-step Retrieval Augmented Generation (RAG) in question-answering (QA) relies partially on the accuracy of the re-ranking phase to select the most relevant context for answer generation. 
 Text re-ranking models are often based on classification models that use predicted probabilities as relevance scores. However, typical deep neural network classification models that directly minimize the prediction loss to find point estimates are often poorly calibrated. 
