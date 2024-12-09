@@ -1,6 +1,6 @@
 import torch
 from torchmetrics.retrieval import RetrievalMAP
-from utils import load_model, load_sample_data
+from utils import load_model, load_sample_data, D_CustomDataset
 
 def calculate_map10(test_prob, y_true, y_index):
     """MAP@10 calculation."""
