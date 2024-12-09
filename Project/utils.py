@@ -1,7 +1,7 @@
 import torch
 import pandas as pd
 
-def load_model(model_path, input_dim):
+def load_model(model, model_path):
     """Load the trained model."""
     model.load_state_dict(torch.load(model_path))
     model.eval()
