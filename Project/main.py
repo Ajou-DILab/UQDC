@@ -324,7 +324,8 @@ def main():
     input_dim = 10  # 샘플 데이터의 피처 수
 
     # 모델 및 데이터 로드
-    model = load_model(model_path, input_dim)
+    empy_model = SentencePairClassifier()
+    model = load_model(empy_model, model_path)
     data = load_sample_data(data_path)
 
     val_set = D_CustomDataset(df_val, maxlen=128, with_labels=False)
