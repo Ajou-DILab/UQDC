@@ -7,11 +7,7 @@ Text re-ranking models are often based on classification models that use predict
 We propose the Evidential Document Re-Ranking (EDRR) model that incorporates Evidential deep learning (EDL) for better calibration of the prediction probabilities and estimation of the uncertainties of model predictions. The proposed EDRR utilizes the calibrated prediction probabilities and uncertainties to generate more reliable relevance criteria for re-ranking. 
 Furthermore, estimated uncertainty values can be utilized as active learning criteria to select more diverse training samples.   
 We compare our EDRR to a regular cross-encoder structure under on Wikipedia-NQ dataset and show that our model outperforms the regular cross-encoder model with up to $10\%$ increases in mean average precision (mAP@10) at the top $10$.
-
-# UQDC: Uncertainty-Aware Re-rank
-
-UQDC focuses on handling uncertainty and improving model calibration effectively. This repository provides various uncertainty-based learning techniques and related code.
-
+ 
 ## Key Features
 - **Uncertainty-Based Learning**: Active learning functionality through `AL_CE.py` and `AL_ENN.py`.
 - **Calibration Tools**: Evaluate model calibration performance using `Calibration.py`.
