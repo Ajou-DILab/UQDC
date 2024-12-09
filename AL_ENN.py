@@ -36,44 +36,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-def batch_expected_calibration_error(samples, true_labels, M=10):
-    # M 개의 구간을 사용한 균일한 binning 접근
-    bin_boundaries = np.linspace(0, 1, M + 1)
-    bin_lowers = bin_boundaries[:-1]
-    bin_uppers = bin_boundaries[1:]
-
-    batch_size = samples.shape[0]
-
-    ece_values = np.zeros(batch_size)
-
-    for i in range(batch_size):
-        # i번째 샘플에 대해 예측된 "확률"을 유지합니다.
-        confidences = samples[i]
-        # 예측값을 확률에서 가져옵니다 (위치 기반)
-        predicted_label = np.argmax(confidences).astype(float)
-
-        # i번째 샘플에 대한 올바른/잘못된 예측의 불리언 리스트를 가져옵니다.
-        accuracy = predicted_label == true_labels[i]
-
-        ece = 0.0
-        for bin_lower, bin_upper in zip(bin_lowers, bin_uppers):
-            # 샘플이 m번째 bin에 속하는지 여부를 결정합니다 (bin_lower와 bin_upper 사이에 있는지)
-            in_bin = np.logical_and(confidences > bin_lower.item(), confidences <= bin_upper.item())
-            # 샘플이 m번째 bin에 속할 확률을 계산할 수 있습니다: (|Bm|/n)
-            prop_in_bin = in_bin.astype(float).mean()
-
-            if prop_in_bin.item() > 0:
-                # m번째 bin의 정확성을 가져옵니다: acc(Bm)
-                accuracy_in_bin = accuracy.astype(float)
-                # m번째 bin의 평균 확률을 가져옵니다: conf(Bm)
-                avg_confidence_in_bin = confidences.mean()
-                # m번째 bin에 대한 |acc(Bm) - conf(Bm)| * (|Bm|/n)을 계산하고 총 ECE에 추가합니다.
-                ece += np.abs(avg_confidence_in_bin - accuracy_in_bin) * prop_in_bin
-
-        # i번째 샘플에 대한 ECE를 저장합니다.
-        ece_values[i] = ece.item()
-
-    return ece_values
 
 def expected_calibration_error(samples, true_labels, M=10):
     # uniform binning approach with M number of bins
@@ -651,7 +613,7 @@ def test_pred(net, device, dataloader, num_samples, with_labels=True):
     predss = []
     ece_loss_list = []
     true_labels = []
-    correct = 0 # 새로 추가
+    correct = 0 
     with torch.no_grad():
         if with_labels:
             for q_ids, q_mask, q_token, label in tqdm(dataloader):
@@ -672,9 +634,9 @@ def test_pred(net, device, dataloader, num_samples, with_labels=True):
                 ece_loss_list.append(b_out)
                 true_labels += true_label.tolist()
 
-        #y_true = true_label # 새로 추가
-        #correct = sum(1 for a, b in zip(y_true, predss) if a == b) # 새로 추가
-        #acc = correct / len(predss) # 새로 추가
+        #y_true = true_label 
+        #correct = sum(1 for a, b in zip(y_true, predss) if a == b) 
+        #acc = correct / len(predss) 
     return probs, uncertainties, predss, correct / num_samples, true_labels
 
 
