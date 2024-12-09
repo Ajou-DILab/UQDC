@@ -476,7 +476,7 @@ def test_pred(net, device, dataloader, num_samples, with_labels=True, result_fil
     ece_logits = []
     ece_label = []
     ece_loss_list = []
-    correct = 0  # 새로 추가
+    correct = 0  
     unc_acc = 0
     with torch.no_grad():
         if with_labels:
@@ -500,20 +500,20 @@ def test_pred(net, device, dataloader, num_samples, with_labels=True, result_fil
         b_out = bce(torch.tensor(ece_logits)[:, 1], torch.tensor(ece_label))
         brier_score = brier_score_loss(torch.tensor(true_labels), torch.tensor(ece_logits)[:, 1])
 
-        # y_true = true_label # 새로 추가
-        # correct = sum(1 for a, b in zip(y_true, predss) if a == b) # 새로 추가
-        # acc = correct / len(predss) # 새로 추가
+        # y_true = true_label 
+        # correct = sum(1 for a, b in zip(y_true, predss) if a == b) 
+        # acc = correct / len(predss)
         u = np.array([i[0] for i in uncertainties])
         total_samples = len(u)
 
         for i in range(total_samples):
             if predss[i] == true_labels[i]:
-                if u[i] <= 0.5:  # 모델이 정답을 맞추고 불확실성이 낮은 경우
+                if u[i] <= 0.5:  
                     unc_acc += 1
             else:
-                if u[i] >= 0.5:  # 모델이 틀렸고 불확실성이 높은 경우
+                if u[i] >= 0.5: 
                     unc_acc += 1
-            # 불확실성 정확도 계산
+            
         unc_accuracy = unc_acc / total_samples
     return probs, uncertainties, predss, correct / num_samples, unc_accuracy, b_out, brier_score
 
