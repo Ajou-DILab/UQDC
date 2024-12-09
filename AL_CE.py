@@ -612,7 +612,7 @@ def test_pred(net, device, dataloader, num_samples, with_labels=True):
     predss = []
     ece_loss_list = []
     true_labels = []
-    correct = 0 # 새로 추가
+    correct = 0 
     with torch.no_grad():
         if with_labels:
             for q_ids, q_mask, q_token, label in tqdm(dataloader):
