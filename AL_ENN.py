@@ -802,7 +802,6 @@ def subset_train(net, criterion, optim, lr, lr_scheduler, train_loader, val_load
     print("Active data is completed...")
 
     if len(new_train_set):
-        # 새로운 DataLoader 생성
         selected_dataloader = DataLoader(new_train_set, batch_size=bs, num_workers=0, shuffle=True, drop_last=False)
         best_acc = -np.Inf
         best_ep = 0
