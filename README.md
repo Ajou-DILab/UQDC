@@ -7,3 +7,37 @@ Text re-ranking models are often based on classification models that use predict
 We propose the Evidential Document Re-Ranking (EDRR) model that incorporates Evidential deep learning (EDL) for better calibration of the prediction probabilities and estimation of the uncertainties of model predictions. The proposed EDRR utilizes the calibrated prediction probabilities and uncertainties to generate more reliable relevance criteria for re-ranking. 
 Furthermore, estimated uncertainty values can be utilized as active learning criteria to select more diverse training samples.   
 We compare our EDRR to a regular cross-encoder structure under on Wikipedia-NQ dataset and show that our model outperforms the regular cross-encoder model with up to $10\%$ increases in mean average precision (mAP@10) at the top $10$.
+
+# UQDC: Uncertainty-Aware Re-rank
+
+UQDC focuses on handling uncertainty and improving model calibration effectively. This repository provides various uncertainty-based learning techniques and related code.
+
+## Key Features
+- **Uncertainty-Based Learning**: Active learning functionality through `AL_CE.py` and `AL_ENN.py`.
+- **Calibration Tools**: Evaluate model calibration performance using `Calibration.py`.
+- **Support Functions**: Mathematical functions for uncertainty handling in `edl_function.py`.
+
+## File Structure
+- **`AL_CE.py`**: Active learning based on cross-entropy loss.
+- **`AL_ENN.py`**: Active learning using Ensemble Neural Networks (ENN).
+- **`Calibration.py`**: Tools for evaluating calibration performance.
+- **`edl_function.py`**: Key mathematical functions for uncertainty processing.
+- **`LICENSE`**: Project license information.
+- **`Project/`**: Additional project-related files.
+
+## Installation and Usage
+
+### 1. Prerequisites
+This project requires Python 3.8 or higher and the following libraries:
+- `numpy`
+- `pandas`
+- `scikit-learn`
+- `matplotlib`
+- `torchmetrics`
+- `transformers`
+- `datasets`
+
+Install the dependencies using:
+```bash
+pip install -r requirements.txt
+
