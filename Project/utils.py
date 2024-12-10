@@ -1,9 +1,12 @@
 import torch
 import pandas as pd
+from torch.utils.data import DataLoader, Dataset
+from transformers import AutoTokenizer
 
 def load_model(model, model_path):
     """Load the trained model."""
-    model.load_state_dict(torch.load(model_path))
+    checkpoint = torch.load(model_path)
+    model.load_state_dict(checkpoint["model_state_dict"])
     model.eval()
     return model
 
