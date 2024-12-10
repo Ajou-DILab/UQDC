@@ -1,6 +1,36 @@
+import numpy as np
+import pandas as pd
+import random
+import os
+
 import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+
+from tqdm.auto import tqdm
+
+from torch.utils.data import DataLoader, Dataset
+
+
+from transformers import AutoTokenizer, AutoModel, AdamW, get_linear_schedule_with_warmup 
 from torchmetrics.retrieval import RetrievalMAP
 from utils import load_model, load_sample_data, D_CustomDataset
+
+device = "cuda:0" if torch.cuda.is_available() else "cpu"
+
+def set_seed(seed):
+    """ Set all seeds to make results reproducible """
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    np.random.seed(seed)
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+
+
+set_seed(42)
 
 def calculate_map10(test_prob, y_true, y_index):
     """MAP@10 calculation."""
@@ -319,13 +349,17 @@ class SentencePairClassifier(nn.Module):
         return torch.max(token_embeddings, 1)[0]
 
 def main():
-    model_path = "models/AL_model.pt"
-    data_path = "data/sample.csv"
+    # Insert Your Path
+    model_path = ""
+    data_path = ""
 
     
     empy_model = SentencePairClassifier()
     model = load_model(empy_model, model_path)
+    model.to(device)
     data = load_sample_data(data_path)
+
+    df_val = pd.DataFrame(data)
 
     val_set = D_CustomDataset(df_val, maxlen=128, with_labels=False)
     val_loader = DataLoader(val_set, batch_size=256, num_workers=0, shuffle=False, drop_last=True)
@@ -334,7 +368,7 @@ def main():
                                                                         dataloader=val_loader,
                                                                         num_samples=len(val_set), with_labels=True,
                                                                         # set the with_labels parameter to False if your want to get predictions on a dataset without labels
-                                                                        result_file=path_to_output_file)
+                                                                        result_file="")
     y_true = df_val['label'][:257000]
     y_index = df_val['indexes'][:257000]
     test_prob = [p[1] for p in probs]
