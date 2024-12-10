@@ -8,7 +8,7 @@ You can download the dataset directly from Google Drive:
 
 You can also download the model directly from Google Drive:
 
-[Download Model](https://drive.google.com/uc?id=1BV8VvOzpOWzotl4X-c47fq2pLAAO5T4Y&export=download)
+[Download Model](https://drive.google.com/uc?id=1_jf8x-pHIZB7yBa4-Na35L2QSUfLHHu-&export=download)
 
 # Using the Model to Calculate Uncertainty and mAP
 
