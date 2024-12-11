@@ -24,6 +24,8 @@ from ENN.ENN_test import test_pred
 from ENN.ENN_train import *
 from ENN.ENN_eval import evaluate_loss
 
+from utils import *
+
 import random
 import os
 import copy
