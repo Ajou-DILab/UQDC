@@ -3,6 +3,7 @@ import pandas as pd
 from torch.utils.data import DataLoader, Dataset
 from transformers import AutoTokenizer
 
+# Load model
 def load_model(model, model_path):
     """Load the trained model."""
     checkpoint = torch.load(model_path)
@@ -10,11 +11,13 @@ def load_model(model, model_path):
     model.eval()
     return model
 
+# Load datasets
 def load_sample_data(data_path):
     """Load sample data from DataFrame."""
     df = pd.read_csv(data_path)
     return df
 
+# Custom dataset for packing input data.
 class D_CustomDataset(Dataset):
 
     def __init__(self, data, maxlen, with_labels=True, bert_model="bert-base-uncased"):
