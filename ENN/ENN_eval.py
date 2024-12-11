@@ -29,7 +29,7 @@ from ENN.ENN_model import SentencePairClassifier
 from edl_function import *
 from utils import *
 
-
+device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
 def evaluate_loss(net, dataloader, epoch, criterion):
     net.eval()
