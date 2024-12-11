@@ -33,7 +33,7 @@ from ENN.ENN_eval import evaluate_loss
 from utils import *
 
 
-
+device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
 maxlen = 128
 bs = 32  # batch size
