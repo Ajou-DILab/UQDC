@@ -4,6 +4,12 @@ import numpy as np
 import os
 import pandas as pd
 
+def calculate_map10(test_prob, y_true, y_index):
+    """MAP@10 calculation."""
+    average_precision_10 = RetrievalMAP(top_k=10)
+    map_output = average_precision_10(torch.tensor(test_prob), torch.tensor(y_true), indexes=torch.tensor(y_index))
+    return map_output
+
 # Load model
 def load_model(model, model_path):
     """Load the trained model."""
