@@ -20,7 +20,7 @@ from transformers import AutoModel, AutoTokenizer, AutoModelForSequenceClassific
 from CustomDataset import D_CustomDataset
 from ENN_model import SentencePairClassifier
 from edl_function import *
-from test import test_pred
+from ENN_test import test_pred
 from ENN_train import *
 from ENN_eval import evaluate_loss
 
