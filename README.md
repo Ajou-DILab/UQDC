@@ -34,6 +34,7 @@ This project requires Python 3.8 or higher and the following libraries:
 Install the dependencies using:
 ```bash
 pip install -r requirements.txt
+```
 
 
 # To Test EDRR 
