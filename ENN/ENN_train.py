@@ -30,7 +30,7 @@ from edl_function import *
 from ENN.ENN_eval import evaluate_loss
 from utils import *
 
-
+device = "cuda:0" if torch.cuda.is_available() else "cpu"
 def subset_train(net, criterion, optim, lr, lr_scheduler, train_loader, val_loader, epochs, iters_to_accumulate, ep):
     global pth
     running_loss = 0.0
