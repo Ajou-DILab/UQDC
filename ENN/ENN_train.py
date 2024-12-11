@@ -17,11 +17,11 @@ from transformers import AutoModel, AutoTokenizer, AutoModelForSequenceClassific
     AdamW, get_linear_schedule_with_warmup, AutoConfig
 
 
-from ENN_model import SentencePairClassifier
+from ENN.ENN_model import SentencePairClassifier
 from edl_function import *
-from ENN_test import test_pred
-from ENN_train import *
-from ENN_eval import evaluate_loss
+from ENN.ENN_test import test_pred
+from ENN.ENN_train import *
+from ENN.ENN_eval import evaluate_loss
 from utils import *
 
 import random
