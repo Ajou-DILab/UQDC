@@ -17,16 +17,19 @@ from transformers import AutoModel, AutoTokenizer, AutoModelForSequenceClassific
     AdamW, get_linear_schedule_with_warmup, AutoConfig
 
 
-from ENN.ENN_model import SentencePairClassifier
-from edl_function import *
-from ENN.ENN_eval import evaluate_loss
-from utils import *
-
 import random
 import os
 import copy
 import numpy as np
 import matplotlib.pyplot as plt
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
+from ENN.ENN_model import SentencePairClassifier
+from edl_function import *
+from ENN.ENN_eval import evaluate_loss
+from utils import *
+
 
 def subset_train(net, criterion, optim, lr, lr_scheduler, train_loader, val_loader, epochs, iters_to_accumulate, ep):
     global pth
