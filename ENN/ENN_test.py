@@ -28,7 +28,7 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from edl_function import *
 from utils import *
 from ENN.ENN_model import SentencePairClassifier
-
+device = "cuda:0" if torch.cuda.is_available() else "cpu"
 def test_pred(net, device, dataloader, num_samples, with_labels=True):
     net.eval()
     probs = []
