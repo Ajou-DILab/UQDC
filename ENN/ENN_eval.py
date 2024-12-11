@@ -19,8 +19,6 @@ from transformers import AutoModel, AutoTokenizer, AutoModelForSequenceClassific
 
 from ENN.ENN_model import SentencePairClassifier
 from edl_function import *
-from ENN.ENN_test import test_pred
-from ENN.ENN_train import *
 from utils import *
 
 import random
