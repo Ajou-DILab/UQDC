@@ -21,6 +21,7 @@ from edl_function import *
 from CE_test import test_pred
 from CE_train import *
 from CE_eval import evaluate_loss
+from utils import *
 
 import random
 import os
