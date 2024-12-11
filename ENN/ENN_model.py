@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 
-import transformers import AutoModel, AutoTokenizer
+from transformers import AutoModel, AutoTokenizer
 
 # Definition of a initial model
 class SentencePairClassifier(nn.Module):
