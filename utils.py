@@ -4,6 +4,9 @@ import numpy as np
 import os
 import pandas as pd
 from torch.utils.data import DataLoader, Dataset, Subset
+from torchmetrics.retrieval import RetrievalMAP
+
+from transformers import AutoTokenizer
 
 def calculate_map10(test_prob, y_true, y_index):
     """MAP@10 calculation."""
