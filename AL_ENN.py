@@ -22,7 +22,7 @@ from ENN_model import SentencePairClassifier
 from edl_function import *
 from test import test_pred
 from ENN_train import *
-from ENN_evaluation import evaluate_loss
+from ENN_eval import evaluate_loss
 
 import random
 import os
