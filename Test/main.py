@@ -70,9 +70,7 @@ def main():
 
     probs, uncertainty, pred_E, acc, uncertainty_acc = test_pred(net=model, device=device,
                                                                         dataloader=val_loader,
-                                                                        num_samples=len(val_set), with_labels=True,
-                                                                        # set the with_labels parameter to False if your want to get predictions on a dataset without labels
-                                                                        result_file="")
+                                                                        num_samples=len(val_set), with_labels=True)
     y_true = df_val['label'][:257000]
     y_index = df_val['indexes'][:257000]
     test_prob = [p[1] for p in probs]
