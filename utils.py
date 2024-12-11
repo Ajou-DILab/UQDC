@@ -1,3 +1,8 @@
+import torch
+import random
+import numpy as np
+import os
+
 def one_hot_embedding(labels, num_classes=2):
     y = torch.eye(num_classes)
     return y[labels]
