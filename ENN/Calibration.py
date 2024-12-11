@@ -30,6 +30,9 @@ import copy
 import numpy as np
 import matplotlib.pyplot as plt
 
+from torchmetrics.classification import CalibrationError
+from sklearn.metrics import brier_score_loss
+
 wiki_nq = load_dataset('Tevatron/wikipedia-nq')
 
 
