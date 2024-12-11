@@ -22,7 +22,7 @@ We compare our EDRR to a regular cross-encoder structure under on Wikipedia-NQ d
 ## Installation and Usage
 
 ### 1. Prerequisites
-This project requires Python 3.8 or higher and the following libraries:
+This project requires Python 3.8 or higher, the following libraries, and was tested on CUDA 12.1:
 - `numpy`
 - `pandas`
 - `scikit-learn`
