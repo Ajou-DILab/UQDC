@@ -4,7 +4,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 
 from transformers import AutoModel, AutoTokenizer
-
+device = "cuda:0" if torch.cuda.is_available() else "cpu"
 # Definition of a initial model
 class SentencePairClassifier(nn.Module):
 
