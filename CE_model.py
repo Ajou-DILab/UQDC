@@ -32,4 +32,5 @@ class SentencePairClassifier(nn.Module):
         alpha = F.softplus(logits) + 1
         #logits = self.cls_layer(self.dropout(pooled_output))
 
-        return logits, _
+        # only used logits
+        return logits, alpha
