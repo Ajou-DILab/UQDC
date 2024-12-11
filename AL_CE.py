@@ -16,8 +16,6 @@ import pandas as pd
 from transformers import AutoModel, AutoTokenizer, AutoModelForSequenceClassification, \
     AdamW, get_linear_schedule_with_warmup, AutoConfig
 
-
-from CustomDataset import D_CustomDataset
 from CE_model import SentencePairClassifier
 from edl_function import *
 from CE_test import test_pred
