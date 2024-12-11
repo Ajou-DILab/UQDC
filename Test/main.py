@@ -249,9 +249,11 @@ class SentencePairClassifier(nn.Module):
 
         return loss
 
+    # Not Used
     def get_output_embedding(self, input_ids, attn_mask):
         return self.bert_layer(input_ids, attn_mask)
-
+        
+    # Not Used
     def calculate_dissonance_from_belief(self, belief):
         num_classes = len(belief)
         Bal_mat = torch.zeros((num_classes, num_classes)).to(device)
@@ -269,6 +271,7 @@ class SentencePairClassifier(nn.Module):
             dissonance += belief[i] * torch.sum(belief * Bal_mat[i, :]) / (sum_belief - belief[i])
         return dissonance
 
+    # Not Used
     def calculate_dissonance(self, belief):
 
         dissonance = torch.zeros(belief.shape[0])
@@ -276,6 +279,7 @@ class SentencePairClassifier(nn.Module):
             dissonance[i] = self.calculate_dissonance_from_belief(belief[i])
         return dissonance
 
+    # Not Used
     def calculate_dissonance_from_belief_vectorized(self, belief):
         # print("belief shape: ", belief.shape)
         sum_bel_mat = torch.transpose(belief, -2, -1) + belief
@@ -308,6 +312,7 @@ class SentencePairClassifier(nn.Module):
 
         return torch.squeeze(each_dis)
 
+    # Not Used
     def calculate_dissonance_from_belief_vectorized_again(self, belief):
         belief = torch.unsqueeze(belief, dim=1)
 
@@ -335,6 +340,7 @@ class SentencePairClassifier(nn.Module):
 
         return each_dis
 
+    # Not Used
     def calculate_dissonance2(self, belief):
         dissonance = torch.zeros(belief.shape[0])
         for i in range(len(belief)):
@@ -342,12 +348,14 @@ class SentencePairClassifier(nn.Module):
             # break
         return dissonance
 
+    # Not Used
     def calculate_dissonance3(self, belief):
         # print("belief: ", belief.shape)
         dissonance = self.calculate_dissonance_from_belief_vectorized_again(belief)
         # break
         return dissonance
 
+    # Not Used
     def calc_loss_vac_bel(self, preds, y, query_set=False):
         """
         Calculate the loss, evidence, vacuity, correct belief, and wrong belief
@@ -391,6 +399,7 @@ class SentencePairClassifier(nn.Module):
 
         return vacuity, wrong_belief_vector, cor_belief_vector, dissonance
 
+    # Not Used
     def mean_pooling(self, model_output, attention_mask):
         token_embeddings = model_output
         input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
@@ -398,6 +407,7 @@ class SentencePairClassifier(nn.Module):
         sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
         return sum_embeddings / sum_mask
 
+    # Not Used
     def max_pooling(self, model_output, attention_mask):
         token_embeddings = model_output  # First element of model_output contains all token embeddings
         input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
