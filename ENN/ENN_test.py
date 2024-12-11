@@ -53,7 +53,6 @@ def test_pred(net, device, dataloader, num_samples, with_labels=True):
                 correct += (true_label == preds).sum().cpu()
                 p = torch.sigmoid(logits)
                 #print(b_out)
-                ece_loss_list.append(b_out)
                 true_labels += true_label.tolist()
 
         #y_true = true_label 
