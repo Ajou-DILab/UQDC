@@ -36,7 +36,6 @@ Install the dependencies using:
 pip install -r requirements.txt
 
 
-
 # To Test EDRR 
 ## Dataset Download
 
