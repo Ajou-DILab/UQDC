@@ -36,7 +36,6 @@ Install the dependencies using:
 pip install -r requirements.txt
 ```
 
-
 ## Test EDRR
 Move to Test Folder download data to data dir and model to model dir. 
 
@@ -50,7 +49,8 @@ You can download the dataset directly from Google Drive:
 
 You can also download the model directly from Google Drive:
 
-[Download Model](https://drive.google.com/uc?id=1_jf8x-pHIZB7yBa4-Na35L2QSUfLHHu-&export=download)
+[Base Model](https://drive.google.com/uc?id=/1xqyd9Qbjb2LdUdNy0LwpR_j8jUs_ID3w&export=download)
+[Final Model](https://drive.google.com/uc?id=1_jf8x-pHIZB7yBa4-Na35L2QSUfLHHu-&export=download)
 
 ### Using the Model to Calculate Uncertainty and mAP
 
