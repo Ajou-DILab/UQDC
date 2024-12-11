@@ -22,18 +22,13 @@ from edl_function import *
 from ENN_test import test_pred
 from ENN_train import *
 from ENN_eval import evaluate_loss
+from utils import *
 
 import random
 import os
 import copy
 import numpy as np
 import matplotlib.pyplot as plt
-
-from torchmetrics import AveragePrecision
-from sklearn.calibration import calibration_curve
-from sklearn.metrics import brier_score_loss
-
-from utils import *
 
 wiki_nq = load_dataset('Tevatron/wikipedia-nq')
 
