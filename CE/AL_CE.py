@@ -16,11 +16,11 @@ import pandas as pd
 from transformers import AutoModel, AutoTokenizer, AutoModelForSequenceClassification, \
     AdamW, get_linear_schedule_with_warmup, AutoConfig
 
-from CE_model import SentencePairClassifier
+from CE.CE_model import SentencePairClassifier
 from edl_function import *
-from CE_test import test_pred
-from CE_train import *
-from CE_eval import evaluate_loss
+from CE.CE_test import test_pred
+from CE.CE_train import *
+from CE.CE_eval import evaluate_loss
 from utils import *
 
 import random
