@@ -16,15 +16,18 @@ import pandas as pd
 from transformers import AutoModel, AutoTokenizer, AutoModelForSequenceClassification, \
     AdamW, get_linear_schedule_with_warmup, AutoConfig
 
-from edl_function import *
-from utils import *
-from ENN.ENN_model import SentencePairClassifier
 
 import random
 import os
 import copy
 import numpy as np
 import matplotlib.pyplot as plt
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
+from edl_function import *
+from utils import *
+from ENN.ENN_model import SentencePairClassifier
 
 def test_pred(net, device, dataloader, num_samples, with_labels=True):
     net.eval()
