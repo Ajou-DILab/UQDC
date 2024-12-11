@@ -268,3 +268,130 @@ def subset_train(net, criterion, optim, lr, lr_scheduler, train_loader, val_load
                 train_correct / (len(df_train)),
                 best_ep)
             torch.save(net.state_dict(), path_to_model)"""
+
+def train_bert(net, criterion, optim, lr, lr_scheduler, train_loader, val_loader, epochs, iters_to_accumulate):
+    global num_active_sample
+    global pth
+    how_iter = 0
+    best_acc = -np.Inf
+    best_ep = 0
+    nb_iterations = len(train_loader)
+    print_every = nb_iterations // 25  # print the training loss 5 times per epoch
+    for ep in range(epochs):
+        net.train()
+        running_loss = 0.0
+        train_correct = 0
+        all_loss = 0.0
+        count = 0
+
+        """if ep <= 4:
+            for p in net.parameters():
+                p.requires_grad = False
+
+            for p in net.cls_layer.parameters():
+                p.requires_grad = True
+        else:
+            for p in net.parameters():
+                p.requires_grad = True"""
+
+        """avg_cor_bel = 0
+        avg_wrong_bel = 0
+        avg_diss = 0
+        avg_vac = 0
+        print("Starting Main Training")
+        for it, (p_ids, p_attn, p_token, p_label) in enumerate(tqdm(train_loader)):
+            # q_ids, q_mask, a_ids, a_mask, labels = q_ids.to(device), q_mask.to(device), a_ids.to(device), a_mask.to(device), labels.to(device)
+
+            p_one_hot = one_hot_embedding(p_label, 2)
+            p_one_hot = p_one_hot.to(device)
+            p_label = p_label.to(device)
+
+            # Obtaining the logits from the model
+            logits, alpha = net(p_ids, p_attn, p_token, p_label)
+            loss = net.dir_prior_mult_likelihood_loss(p_one_hot, logits, alpha, ep, p_label, sub = False)
+            loss = torch.mean(loss)
+            loss += criterion(logits.squeeze(-1), p_one_hot.float(), ep, 2, 10, device)
+            #p_predicted = (alpha.view(-1) >= 0.5).int()
+            _, p_predicted = torch.max(alpha, 1)
+            vac, wrong_bel, cor_bel, diss = net.calc_loss_vac_bel(alpha, p_one_hot)
+
+            avg_cor_bel += torch.mean(cor_bel)
+            avg_wrong_bel += torch.mean(wrong_bel)
+            avg_diss += torch.mean(diss)
+            avg_vac += torch.mean(vac)
+            # print(loss)
+
+            #p_label = p_label.to(device)
+            train_correct += (p_label == p_predicted).sum().cpu()
+            # loss = criterion(logits.squeeze(-1), one_hot.float(), ep, 3, 10, device)
+
+            loss.backward()
+
+            optim.step()
+            # Updates the scale for next iteration.
+            # Adjust the learning rate based on the number of iterations.
+            lr_scheduler.step()
+            # Clear gradients
+            optim.zero_grad()
+
+            running_loss += loss.item()
+            count += 1
+            all_loss += loss.item()
+
+            if (it + 1) % print_every == 0:  # Print training loss information
+                print()
+                print("Iteration {}/{} of epoch {} complete. Loss : {}"
+                      .format(it + 1, nb_iterations, ep + 1, running_loss / print_every))
+
+                running_loss = 0.0"""
+        subset_train(net, criterion, optim, lr, sub_scheduler, train_loader, val_loader, epochs, iters_to_accumulate, ep)
+        val_loss, val_acc = evaluate_loss(net, val_loader, ep, criterion)  # Compute validation loss
+        #train_loss.append(all_loss / count)
+        validation_loss.append(val_loss.item())
+        print()
+        val_acc = val_acc / (len(df_val))
+        train_accuracy.append(train_correct / len(df_train) + num_active_sample)
+        validation_accuracy.append(val_acc)
+
+        """train_col_bel.append((avg_cor_bel / count).detach().cpu().numpy())
+        train_wrong_bel.append((avg_wrong_bel / count).detach().cpu().numpy())
+        train_diss.append((avg_diss / count).detach().cpu().numpy())
+        train_vac.append((avg_vac / count).detach().cpu().numpy())
+        print("Epoch {} complete! Train ACC : {} Validation Loss : {} ACC : {}".format(ep + 1,
+                                                                                       train_correct / (len(df_train)),
+                                                                                       val_loss,
+                                                                                       val_acc))
+"""
+
+        #if val_acc > best_acc:
+        best_ep += 1
+        print("Best validation acc improved from {} to {}".format(best_acc, val_acc))
+        best_acc = val_acc
+        print()
+        """if ep < 10:
+            path_to_model = 'models/{} Div_highUnc_samples_sep5_Active_kl_dynamic_ADAMW_ENN_lr_{}_train_acc_{:.4f}_ep_{}_acc_{:.4f}.pt'.format(
+                20000 + ep * 1000, lr,
+                train_correct / (len(df_train)),
+                2,
+                val_acc)
+        elif 10 <= ep < 20:
+            path_to_model = 'models/{} Div_AllRandom_samples_sep5_Active_kl_dynamic_ADAMW_ENN_lr_{}_train_acc_{:.4f}_ep_{}_acc_{:.4f}.pt'.format(
+                20000 + (ep - 10) * 1000, lr,
+                train_correct / (len(df_train)),
+                2,
+                val_acc)
+        else:
+            path_to_model = 'models/{} Div_highUncRandom_samples_sep5_Active_kl_dynamic_ADAMW_ENN_lr_{}_train_acc_{:.4f}_ep_{}_acc_{:.4f}.pt'.format(
+                20000 + (ep - 20) * 1000, lr,
+                train_correct / (len(df_train)),
+                2,
+                val_acc)""""""
+        if best_ep >= 3:
+            best_ep = 0
+        torch.save(net.state_dict(), path_to_model)
+        print("The model has been saved in {}".format(path_to_model))"""
+        # Saving the model
+        save_weights(model, "model_weight.txt", ep)
+        num_active_sample += per_num_sample
+    #del loss
+    torch.cuda.empty_cache()
