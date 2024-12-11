@@ -20,6 +20,7 @@ from transformers import AutoModel, AutoTokenizer, AutoModelForSequenceClassific
 from CustomDataset import D_CustomDataset
 from ENN_model import SentencePairClassifier
 from edl_function import *
+from test import test_pred
 
 import random
 import os
@@ -239,75 +240,6 @@ train_wrong_bel = []
 train_diss = []
 train_vac = []
 
-def test_pred(net, device, dataloader, num_samples, with_labels=True):
-    net.eval()
-    probs = []
-    uncertainties = []
-    predss = []
-    ece_loss_list = []
-    true_labels = []
-    correct = 0 
-    with torch.no_grad():
-        if with_labels:
-            for q_ids, q_mask, q_token, label in tqdm(dataloader):
-                q_ids, q_mask, q_token, true_label = q_ids.to(device), q_mask.to(device), q_token.to(device), label.to(device)
-                logits, alpha = net(q_ids, q_mask, q_token, true_label)
-                #logits = logits[0]
-                #alpha = F.relu(logits) + 1
-                uncertainty = 2 / torch.sum(alpha, dim=1, keepdim=True)
-                _, preds = torch.max(alpha, 1)
-                prob = alpha / torch.sum(alpha, dim=1, keepdim=True)
-                probs += prob.tolist()
-                uncertainties += uncertainty.tolist()
-                predss += preds.tolist()
-                correct += (true_label == preds).sum().cpu()
-                p = torch.sigmoid(logits)
-                b_out = bce(p.detach().cpu(), true_label.detach().cpu())
-                #print(b_out)
-                ece_loss_list.append(b_out)
-                true_labels += true_label.tolist()
-
-        #y_true = true_label 
-        #correct = sum(1 for a, b in zip(y_true, predss) if a == b) 
-        #acc = correct / len(predss) 
-    return probs, uncertainties, predss, correct / num_samples, true_labels
-
-
-def one_hot_embedding(labels, num_classes=2):
-    y = torch.eye(num_classes)
-    return y[labels]
-
-
-def set_seed(seed):
-    """ Set all seeds to make results reproducible """
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
-    np.random.seed(seed)
-    random.seed(seed)
-    os.environ['PYTHONHASHSEED'] = str(seed)
-
-def save_weights(model, file_path, epoch):
-    # 모델의 가중치를 파일에 추가
-    with open(file_path, 'a') as file:
-        # 모델의 가중치를 문자열로 변환하여 파일에 작성
-        file.write(str(epoch) + " epoch\n")
-        file.write(str(model.cls_layer.weight.data))
-        file.write('\n')  # 가중치 사이에 줄바꿈 추가
-
-def get_paraphrased_sentences(model, tokenizer, sentence, num_return_sequences=5, num_beams=5):
-  # tokenize the text to be form of a list of token IDs
-  inputs = tokenizer(sentence, truncation=True, padding="max_length", return_tensors="pt")
-  inputs = inputs.to(device)
-  # generate the paraphrased sentences
-  outputs = model.generate(
-    **inputs,
-    num_beams=num_beams,
-    num_return_sequences=num_return_sequences,
-  )
-  # decode the generated sentences using the tokenizer to get them back to text
-  return tokenizer.batch_decode(outputs, skip_special_tokens=True)
 def subset_train(net, criterion, optim, lr, lr_scheduler, train_loader, val_loader, epochs, iters_to_accumulate, ep):
     global pth
     running_loss = 0.0
