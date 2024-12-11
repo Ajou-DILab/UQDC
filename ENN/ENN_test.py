@@ -18,6 +18,7 @@ from transformers import AutoModel, AutoTokenizer, AutoModelForSequenceClassific
 
 from edl_function import *
 from utils import *
+from ENN.ENN_model import SentencePairClassifier
 
 import random
 import os
