@@ -2,6 +2,21 @@ import torch
 import random
 import numpy as np
 import os
+import pandas as pd
+
+# Load model
+def load_model(model, model_path):
+    """Load the trained model."""
+    checkpoint = torch.load(model_path)
+    model.load_state_dict(checkpoint["model_state_dict"])
+    model.eval()
+    return model
+
+# Load datasets
+def load_sample_data(data_path):
+    """Load sample data from DataFrame."""
+    df = pd.read_csv(data_path)
+    return df
 
 def one_hot_embedding(labels, num_classes=2):
     y = torch.eye(num_classes)
