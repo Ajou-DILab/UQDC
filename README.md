@@ -62,5 +62,5 @@ To calculate the uncertainty and mean Average Precision (mAP) values for the dat
 2. **Place the downloaded .csv and .pt file** in the same directory as `main.py`.
 3. **Run the script**:
    ```bash
-   python main.py
+   python main.py --model_path "YOUR_MODEL_PATH" --data_path "YOUR_DATA_PATH"
    ```
