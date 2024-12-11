@@ -1,80 +1,23 @@
+# Import libraries
 import numpy as np
 import pandas as pd
 import random
 import os
-
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
-
 import argparse
-
 from tqdm.auto import tqdm
-
 from torch.utils.data import DataLoader, Dataset
-
-
 from transformers import AutoTokenizer, AutoModel, AdamW, get_linear_schedule_with_warmup
 from torchmetrics.retrieval import RetrievalMAP
-#from utils import load_model, load_sample_data, D_CustomDataset
+from utils import load_model, load_sample_data, D_CustomDataset
 
-import torch
-import pandas as pd
-from torch.utils.data import DataLoader, Dataset
-from transformers import AutoTokenizer
-
-def load_model(model, model_path):
-    """Load the trained model."""
-    checkpoint = torch.load(model_path)
-    model.load_state_dict(checkpoint["model_state_dict"])
-    model.eval()
-    return model
-
-def load_sample_data(data_path):
-    """Load sample data from DataFrame."""
-    df = pd.read_csv(data_path)
-    return df
-
-class D_CustomDataset(Dataset):
-
-    def __init__(self, data, maxlen, with_labels=True, bert_model="bert-base-uncased"):
-        self.data = data  # pandas dataframe
-        # Initialize the tokenizer
-        self.tokenizer = AutoTokenizer.from_pretrained(bert_model)
-
-        self.maxlen = maxlen
-        self.with_labels = with_labels
-
-    def __len__(self):
-        return len(self.data)
-
-    def __getitem__(self, index):
-        # Selecting sentence1 and sentence2 at the specified index in the data frame
-        sent1 = str(self.data.loc[index, 'query'])
-        sent2 = str(self.data.loc[index, 'documents'])
-
-        doc_list = []
-        # Tokenize the pair of sentences to get token ids, attention masks and token type ids
-        query_output = self.tokenizer(sent1, sent2,
-                               padding='max_length',  # Pad to max_length
-                               truncation=True,  # Truncate to max_length
-                               max_length=self.maxlen,
-                               return_tensors='pt')  # Return torch.Tensor objects
-
-
-        label = self.data.loc[index, 'label']
-
-        q_token_ids = query_output['input_ids'].squeeze(0)  # tensor of token ids
-        q_attn_masks = query_output['attention_mask'].squeeze(
-            0)  # binary tensor with "0" for padded values and "1" for the other values
-        token_type_ids = query_output['token_type_ids'].squeeze(0)
-
-        return q_token_ids, q_attn_masks, token_type_ids, label
-
-
+# Set the device to GPU if available, otherwise use CPU
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
+# Set random seeds
 def set_seed(seed):
     """ Set all seeds to make results reproducible """
     torch.manual_seed(seed)
@@ -85,15 +28,16 @@ def set_seed(seed):
     random.seed(seed)
     os.environ['PYTHONHASHSEED'] = str(seed)
 
-
 set_seed(42)
 
+# Calculate mAP@10 for evaluation
 def calculate_map10(test_prob, y_true, y_index):
     """MAP@10 calculation."""
     average_precision_10 = RetrievalMAP(top_k=10)
     map_output = average_precision_10(torch.tensor(test_prob), torch.tensor(y_true), indexes=torch.tensor(y_index))
     return map_output
 
+# Perform predictions during testing and comput related metrics (Probability, Uncertainty, mAP@10)
 def test_pred(net, device, dataloader, num_samples, with_labels=True, result_file="results/output.txt"):
     net.eval()
     probs = []
@@ -142,6 +86,7 @@ def test_pred(net, device, dataloader, num_samples, with_labels=True, result_fil
         unc_accuracy = unc_acc / total_samples
     return probs, uncertainties, predss, correct / num_samples, unc_accuracy
 
+# Definition of a initial model
 class SentencePairClassifier(nn.Module):
 
     def __init__(self, bert_model="bert-base-uncased", freeze_bert=False):
@@ -178,6 +123,7 @@ class SentencePairClassifier(nn.Module):
 
         return logits, alpha
 
+    # KL-Divergence
     def KL_flat_dirichlet(self, alpha):
         """
         Calculate Kl divergence between a flat/uniform dirichlet distribution and a passed dirichlet distribution
@@ -195,6 +141,7 @@ class SentencePairClassifier(nn.Module):
         kl = dist.kl_divergence(dist1, dist2).reshape(-1, 1)
         return kl
 
+    # Loss function
     def dir_prior_mult_likelihood_loss(self, gt, logits, alpha, current_epoch, p_label, sub = False):
         """
         Calculate the loss based on the dirichlet prior and multinomial likelihoood
