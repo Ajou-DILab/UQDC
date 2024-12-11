@@ -22,6 +22,7 @@ from edl_function import *
 from ENN_test import test_pred
 from ENN_train import *
 from ENN_eval import evaluate_loss
+from utils import *
 
 import random
 import os
